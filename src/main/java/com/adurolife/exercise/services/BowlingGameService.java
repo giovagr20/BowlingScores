@@ -51,9 +51,10 @@ public class BowlingGameService {
             if (isSpare() || isStrike(pins)) {
                 currentRoll++;
                 score+=pins;
-                if (currentRoll>3) {
-                    throw new BowlingGameException("It is the tenth frame and your third roll, you can not roll more.");
-                }
+            }
+
+            if (currentRoll > 3) {
+                throw new BowlingGameException("It is the tenth frame and your third roll, you can not roll more.");
             }
         }
     }
