@@ -1,5 +1,6 @@
 package com.adurolife.exercise.services;
 
+import com.adurolife.exercise.exceptions.BowlingGameException;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class BowlingGameService {
             handleRegularRoll(pins);
         }
         checkCurrentRoll();
+        checkTenthFrame(pins);
     }
 
     public void reset() {
@@ -44,6 +46,17 @@ public class BowlingGameService {
         Arrays.fill(rolls, 0);
     }
 
+    private void checkTenthFrame(int pins) {
+        if (currentFrame == 10) {
+            if (isSpare() || isStrike(pins)) {
+                currentRoll++;
+                score+=pins;
+                if (currentRoll>3) {
+                    throw new BowlingGameException("It is the tenth frame and your third roll, you can not roll more.");
+                }
+            }
+        }
+    }
     private void recordRoll(int pins) {
         rolls[rollIndex++] = pins;
     }
