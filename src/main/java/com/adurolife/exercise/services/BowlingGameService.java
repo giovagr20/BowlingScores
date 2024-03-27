@@ -48,15 +48,23 @@ public class BowlingGameService {
 
     private void checkTenthFrame(int pins) {
         if (currentFrame == 10) {
-            if (isSpare() || isStrike(pins)) {
-                currentRoll++;
-                score+=pins;
+            if (isSpare()) {
+                makeBonus(pins);
+            }
+
+            if (isStrike(pins)) {
+                makeBonus(pins);
             }
 
             if (currentRoll > 3) {
                 throw new BowlingGameException("It is the tenth frame and your third roll, you can not roll more.");
             }
         }
+    }
+
+    private void makeBonus(int pins) {
+        currentRoll++;
+        score+=pins;
     }
     private void recordRoll(int pins) {
         rolls[rollIndex++] = pins;
