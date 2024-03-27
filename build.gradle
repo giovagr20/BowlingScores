@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.4'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'jacoco'
+
 }
 
 group = 'com.adurolife.exercise'
@@ -33,6 +35,81 @@ dependencies {
 
 }
 
-tasks.named('test') {
+task createProperties(dependsOn: processResources) {
+	doLast {
+		new File("$buildDir/resources/main/version.properties").withWriter {
+			w -> Properties p = new Properties()
+				p['version'] = project.version.toString()
+				p.store w, null
+		}
+	}
+}
+
+classes {
+	dependsOn createProperties
+}
+
+test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+var testExcluded = [
+        'src/main/java/com/adurolife/exercise/constants/**',
+		'src/main/java/com/adurolife/exercise/exceptions/**',
+		'src/main/java/com/adurolife/exercise/BowlingScoresApplication.class',
+		'src/main/java/com/adurolife/exercise/services/BowlingStartService.class',
+		'com.adurolife.exercise.constants.MessageConstant',
+		'com.adurolife.exercise.services.BowlingStartService',
+		'com.adurolife.exercise.exceptions.BowlingGameException',
+		'com.adurolife.exercise.BowlingScoresApplication'
+
+
+
+
+]
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: testExcluded)
+		}))
+	}
+
+	finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+	dependsOn jacocoTestReport
+
+	var classExcluded= testExcluded.collect {
+		it.replace('\\.class', '')
+		.replaceAll('/', '.')
+		.replaceAll('\\*\\*', '*x')
+	}
+	violationRules {
+		rule {
+			element = 'CLASS'
+			excludes = classExcluded
+			limit {
+				minimum = 0.8
+				counter = 'LINE'
+			}
+			limit {
+				minimum = 0.8
+				counter = 'BRANCH'
+			}
+		}
+	}
+}
+
+jacoco {
+	toolVersion = "0.8.11"
+	reportsDirectory = layout.buildDirectory.dir('jacocoReport')
 }
