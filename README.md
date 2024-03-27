@@ -3,14 +3,18 @@ A Command Line app to run scores in bowling
 
 
 ## How to run the App?
-1. In IDE please open folder `BowlingScores`
-2. Then, click in Load Scripts
-3. Go to `src/main/java/com/adurolife/exercise/BowlingScoresApplication.java` and click Run
+1. Before running the app you can type `gradle clean build`
+2. Then type `gradle :bootRun`
+3. Otherwise, go to `./build/libs` and then type `java -jar BowlingScores-0.0.1-SNAPSHOT.jar`
 
 ## How to run the test?
-1. Go to Gradle Commands and type `gradle clean build`
+1. Type `gradle clean build`
+2. Then, type `gradle test -i`
+![img_1.png](img_1.png)
 
 ## How to check the coverage?
-1. Once it was execute command `gradle clean build`, Go to `build/` folder
-2. Open folder `jacocoHtml`
-3. Go to `index.html` and open in any browser
+1. Once it was executed command `gradle clean build`, 
+2. Go to `./build/jacocoHtml/index.html`
+3. `index.html` will be open in default browser
+
+![img.png](img.png)
