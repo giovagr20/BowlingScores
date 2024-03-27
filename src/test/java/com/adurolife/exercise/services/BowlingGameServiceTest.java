@@ -1,5 +1,6 @@
 package com.adurolife.exercise.services;
 
+import com.adurolife.exercise.exceptions.BowlingGameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,6 +98,102 @@ class BowlingGameServiceTest {
         assertEquals(1, bowlingGameService.getCurrentRoll());
     }
 
+    @Test
+    void givenTenTries_whenIsAStrikeOrSpare3Rolled_thenThrowsError() {
+        final int TRY_1 = 1;
+        final int TRY_2 = 2;
+        final int TRY_3 = 3;
+        final int TRY_4 = 4;
+        final int TRY_5 = 5;
+        final int TRY_6 = 1;
+        final int TRY_7 = 2;
+        final int TRY_8 = 9;
+        final int TRY_9 = 3;
+        final int TRY_10 = 1;
+        final int TRY_11 = 4;
+        final int TRY_12 = 3;
+        final int TRY_13 = 5;
+        final int TRY_14 = 2;
+        final int TRY_15 = 1;
+        final int TRY_16 = 7;
+        final int TRY_17 = 6;
+        final int TRY_18 = 3;
+        final int TRY_19 = 7;
+        final int TRY_20 = 3;
+        final String EXPECTED_MESSAGE = "It is the tenth frame and your third roll, you can not roll more.";
+        bowlingGameService.roll(TRY_1);
+        bowlingGameService.roll(TRY_2);
+        bowlingGameService.roll(TRY_3);
+        bowlingGameService.roll(TRY_4);
+        bowlingGameService.roll(TRY_5);
+        bowlingGameService.roll(TRY_6);
+        bowlingGameService.roll(TRY_7);
+        bowlingGameService.roll(TRY_8);
+        bowlingGameService.roll(TRY_9);
+        bowlingGameService.roll(TRY_10);
+        bowlingGameService.roll(TRY_11);
+        bowlingGameService.roll(TRY_12);
+        bowlingGameService.roll(TRY_13);
+        bowlingGameService.roll(TRY_14);
+        bowlingGameService.roll(TRY_15);
+        bowlingGameService.roll(TRY_16);
+        bowlingGameService.roll(TRY_17);
+        bowlingGameService.roll(TRY_18);
+        bowlingGameService.roll(TRY_19);
+        BowlingGameException gameException = assertThrows(BowlingGameException.class, () -> {
+            bowlingGameService.roll(TRY_20);
+        });
+        assertEquals(EXPECTED_MESSAGE,"It is the tenth frame and your third roll, you can not roll more.");
+        assertEquals(102, bowlingGameService.getScore());
+    }
+
+    @Test
+    void givenTenTries_whenIsAStrikeOrSpare_then3RollEnable() {
+        final int TRY_1 = 1;
+        final int TRY_2 = 2;
+        final int TRY_3 = 3;
+        final int TRY_4 = 4;
+        final int TRY_5 = 5;
+        final int TRY_6 = 1;
+        final int TRY_7 = 2;
+        final int TRY_8 = 9;
+        final int TRY_9 = 3;
+        final int TRY_10 = 1;
+        final int TRY_11 = 4;
+        final int TRY_12 = 3;
+        final int TRY_13 = 5;
+        final int TRY_14 = 2;
+        final int TRY_15 = 1;
+        final int TRY_16 = 7;
+        final int TRY_17 = 6;
+        final int TRY_18 = 1;
+        final int TRY_19 = 7;
+        final int TRY_20 = 3;
+        final int TRY_21 = 3;
+        bowlingGameService.roll(TRY_1);
+        bowlingGameService.roll(TRY_2);
+        bowlingGameService.roll(TRY_3);
+        bowlingGameService.roll(TRY_4);
+        bowlingGameService.roll(TRY_5);
+        bowlingGameService.roll(TRY_6);
+        bowlingGameService.roll(TRY_7);
+        bowlingGameService.roll(TRY_8);
+        bowlingGameService.roll(TRY_9);
+        bowlingGameService.roll(TRY_10);
+        bowlingGameService.roll(TRY_11);
+        bowlingGameService.roll(TRY_12);
+        bowlingGameService.roll(TRY_13);
+        bowlingGameService.roll(TRY_14);
+        bowlingGameService.roll(TRY_15);
+        bowlingGameService.roll(TRY_16);
+        bowlingGameService.roll(TRY_17);
+        bowlingGameService.roll(TRY_18);
+        bowlingGameService.roll(TRY_19);
+        bowlingGameService.roll(TRY_20);
+        bowlingGameService.roll(TRY_21);
+        assertEquals(83, bowlingGameService.getScore());
+
+    }
 
     @Test
     void givenVariousPins_whenUserChooseReset_thenResetGame() {
